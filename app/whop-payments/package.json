@@ -1,0 +1,19 @@
+{
+  "name": "wittle-whop-payments",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.13"
+  },
+  "scripts": {
+    "start": "node server.mjs",
+    "test": "node --test *.test.mjs",
+    "checkout": "node checkout.mjs",
+    "audit:workflow": "node workflow-audit.mjs",
+    "demo": "node demo.mjs",
+    "sandbox:prepare": "node prepare-sandbox.mjs"
+  },
+  "dependencies": {
+    "@whop/sdk": "2.6.0"
+  }
+}

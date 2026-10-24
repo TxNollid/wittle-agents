@@ -1,0 +1,36 @@
+{
+  "dependencies": {
+    "@solarisdk/sandbox": "^0.2.0"
+  },
+  "name": "terac-solari-agent",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "deploy": "node solari.mjs deploy",
+    "status": "node solari.mjs status",
+    "health": "node solari.mjs health",
+    "smoke": "node solari.mjs smoke",
+    "agent": "node solari.mjs run",
+    "pause": "node solari.mjs pause",
+    "resume": "node solari.mjs resume",
+    "test": "node --test server.test.mjs rooms-callback.test.mjs sessions.test.mjs execution-policy.test.mjs parent-brief-agent.test.mjs openrouter-parent.test.mjs",
+    "test:openrouter-parent": "node openrouter-smoke.mjs",
+    "test:parent-subscription": "bun omp-parent-smoke.ts",
+    "codex-install": "node solari.mjs codex-install",
+    "codex-login": "node solari.mjs codex-login",
+    "codex-status": "node solari.mjs codex-status",
+    "configure-codex": "node solari.mjs configure-codex",
+    "rooms-login": "node rooms.mjs login",
+    "rooms-add": "node rooms.mjs add",
+    "rooms-start": "node rooms.mjs start",
+    "rooms-stop": "node rooms.mjs stop",
+    "rooms-status": "node rooms.mjs status",
+    "rooms-wakes": "node rooms.mjs status --wakes",
+    "instructions:push": "node solari.mjs instructions",
+    "session:new": "node solari.mjs session-new",
+    "session:run": "node solari.mjs session-run"
+  }
+}

@@ -1,0 +1,1 @@
+{"permissions": {"allow": ["WebFetch(domain:wittle-terac-studies.vercel.app)"], "deny": ["Bash", "Edit", "Write", "NotebookEdit"]}}

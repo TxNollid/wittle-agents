@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:wittle:agents:wa-v2.1-teaser.1",
+  "title": "Separate unpaid teaser input; no fabricated paid-order identity",
+  "$comment": "Growth drafts only. Source eligibility and public URL safety require independently observed evidence and trusted adapter checks, not model assertions.",
+  "$defs": {
+    "Id": {"type":"string","pattern":"^[A-Za-z0-9_-]{1,200}$"},
+    "Url": {"type":"string","format":"uri","pattern":"^https?://[^/@?#\\s]+(?:[/?#][^\\s]*)?$"},
+    "TeaserInput": {
+      "type":"object","additionalProperties":false,
+      "required":["site_url","request_id","mode","prompt_version","provenance"],
+      "properties":{
+        "site_url":{"$ref":"#/$defs/Url"},"request_id":{"type":"string","pattern":"^[A-Za-z0-9_-]{8,100}$"},
+        "mode":{"enum":["fixture","sandbox","live"]},"prompt_version":{"const":"auditor-v1"},
+        "provenance":{"type":"object","additionalProperties":false,"required":["source_url","observed_at","evidence_level"],"properties":{"source_url":{"$ref":"#/$defs/Url"},"observed_at":{"type":"string","format":"date-time","pattern":"Z$"},"evidence_level":{"enum":["fixture","local_execution","provider"]}}}
+      },
+      "allOf":[{"if":{"properties":{"mode":{"enum":["sandbox","live"]}}},"then":{"properties":{"provenance":{"properties":{"evidence_level":{"enum":["local_execution","provider"]}}}}}}]
+    },
+    "TeaserLimits": {
+      "type":"object","additionalProperties":false,
+      "properties":{"maxObservations":{"type":"integer","minimum":1,"maximum":2},"maxRuntimeMs":{"type":"integer","minimum":1,"maximum":120000},"pageTimeoutMs":{"type":"integer","minimum":1,"maximum":20000}}
+    },
+    "TeaserLeadEvidence": {
+      "type":"object","additionalProperties":false,
+      "required":["lead_id","site_url","source_url","requested_feedback","observed_at","evidence_ref"],
+      "properties":{"lead_id":{"$ref":"#/$defs/Id"},"site_url":{"$ref":"#/$defs/Url"},"source_url":{"$ref":"#/$defs/Url"},"requested_feedback":{"const":true},"observed_at":{"type":"string","format":"date-time","pattern":"Z$"},"evidence_ref":{"$ref":"#/$defs/Id"}}
+    }
+  }
+}

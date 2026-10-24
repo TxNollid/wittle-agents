@@ -1,0 +1,21 @@
+{
+  "study": "local-guide-nyc-rating",
+  "prompt_version": "local-guide-nyc-v1",
+  "provenance": "Sample request written for the study (no customer data). Stops researched and checked by Claude Opus 5.5 following prompts/local-guide-nyc-v1.md on 2026-10-24; hours quoted from each source page at checked_at. Brooklyn Brewery was considered and dropped: its site says the Williamsburg taproom is temporarily closed.",
+  "request": { "date": "2026-10-25", "start": "11:00", "end": "16:00", "start_area": "Williamsburg (near Kent Ave)", "budget_usd": 50, "interests": "waterfront, good food, something fun, low effort", "group": "2 adults" },
+  "plan": {
+    "date": "2026-10-25", "start": "11:00", "end": "16:00", "budget_usd": 50,
+    "stops": [
+      { "name": "Domino Park", "address": "15 River St, Brooklyn, NY 11249", "arrive": "11:00", "depart": "11:40", "why": "Waterfront park on the old sugar refinery site with Manhattan skyline views; easy start a few blocks from Kent Ave.", "cost_usd": 0, "transit_min_from_prev": 0, "source_url": "https://www.dominopark.com/visit", "checked_at": "2026-10-24T18:55:49Z", "hours": "open daily 6 am — 11 pm" },
+      { "name": "Time Out Market New York", "address": "55 Water Street, Brooklyn, NY 11201", "arrive": "12:25", "depart": "13:30", "why": "Food hall with many local kitchens under one roof, so two people with different cravings both win; rooftop has bridge views.", "cost_usd": 25, "transit_min_from_prev": 40, "source_url": "https://www.timeout.com/time-out-market-new-york", "checked_at": "2026-10-24T18:55:49Z", "hours": "Sunday - Thursday: 8am – 10pm (individual kitchen times may vary)" },
+      { "name": "Jane's Carousel", "address": "Empire Fulton Ferry, Brooklyn Bridge Park, DUMBO", "arrive": "13:40", "depart": "14:05", "why": "Restored 1922 carousel in a glass pavilion right under the Brooklyn Bridge; a fun ten minutes for adults too.", "cost_usd": 4, "transit_min_from_prev": 5, "source_url": "https://www.janescarousel.com/hours/", "checked_at": "2026-10-24T18:55:49Z", "hours": "Fall hours Sep 14–Dec 31 2026: 11:00 AM-5:50 PM, closed Monday and Tuesday" },
+      { "name": "Brooklyn Bridge Park waterfront walk (Empire Fulton Ferry to Pier 1)", "address": "Brooklyn Bridge Park, DUMBO, Brooklyn", "arrive": "14:10", "depart": "15:30", "why": "Free, flat walk along the water with the best Manhattan and bridge views in Brooklyn; benches everywhere.", "cost_usd": 0, "transit_min_from_prev": 5, "source_url": "https://brooklynbridgepark.org/places-to-see/janes-carousel/", "checked_at": "2026-10-24T18:55:49Z", "hours": "Park open 7 days a week, 6AM - 1AM" }
+    ],
+    "notes": [
+      "Williamsburg to DUMBO: NYC Ferry or a 15-minute ride; check the ferry schedule the morning of, fare not verified here.",
+      "Brooklyn Brewery is temporarily closed per its site, so it's not on this plan.",
+      "Carousel tickets are $4 each.",
+      "Time Out Market kitchens keep their own hours; most are open at lunch."
+    ]
+  }
+}

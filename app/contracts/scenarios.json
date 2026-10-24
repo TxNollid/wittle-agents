@@ -1,0 +1,840 @@
+{
+  "contract_revision": "wa-v2.1",
+  "evidence_level": "fixture",
+  "warning": "Expected adapter behavior, NOT executed provider evidence. Shape checks do not implement these invariants. Owners/QA must run these against their actual adapters.",
+  "cases": [
+    {
+      "id": "superseded-payment",
+      "operation": "reconcile_payment",
+      "given": {
+        "quote_state": "superseded",
+        "payment_verified": true,
+        "quote_hash": "a9f36e472d082769508a6a1d905bc2eaed266dd8e1bdf5076bb49545728a58ec",
+        "room_id": "fixture_room_01"
+      },
+      "input": {
+        "payment_id": "fixture_payment_01"
+      },
+      "expected": {
+        "state": "needs_attention",
+        "reason": "superseded_payment",
+        "acceptance_created": false,
+        "new_jobs": 0,
+        "refund_sent": false
+      }
+    },
+    {
+      "id": "refunded-order",
+      "operation": "claim_run",
+      "given": {
+        "payment_status": "paid",
+        "refund_status": "full",
+        "dispute_status": "none",
+        "job_id": "fixture_order_01"
+      },
+      "input": {
+        "request_id": "fixture_run_0001"
+      },
+      "expected": {
+        "code": "PAYMENT_INELIGIBLE",
+        "new_attempts": 0,
+        "future_actions_authorized": false
+      }
+    },
+    {
+      "id": "cross-room-status",
+      "operation": "order_status",
+      "given": {
+        "capability_room_id": "fixture_room_02",
+        "quote_room_id": "fixture_room_01"
+      },
+      "input": {
+        "quote_id": "fixture_quote_01"
+      },
+      "expected": {
+        "code": "BINDING_MISMATCH",
+        "disclosed_order": false
+      }
+    },
+    {
+      "id": "cross-room-result",
+      "operation": "submit_result",
+      "given": {
+        "current_job": {
+          "schema_version": "wa-v2.1",
+          "order_id": "fixture_order_01",
+          "job_id": "fixture_order_01",
+          "attempt_id": "fixture_run_01",
+          "room_id": "fixture_room_01",
+          "quote_id": "fixture_quote_01",
+          "quote_hash": "a9f36e472d082769508a6a1d905bc2eaed266dd8e1bdf5076bb49545728a58ec",
+          "service_version": "website_audit_v1",
+          "buyer_id": "fixture_buyer_01",
+          "prompt_version": "auditor-v1",
+          "mode": "fixture",
+          "scope": {
+            "site_url": "https://fixture.example/",
+            "scope_summary": "Audit the homepage and pricing page for clarity and mobile usability.",
+            "pages": [
+              "https://fixture.example/",
+              "https://fixture.example/pricing"
+            ],
+            "excluded_pages": [
+              "https://fixture.example/login"
+            ],
+            "goal": "Improve clarity and mobile usability",
+            "constraints": [
+              "No site edits",
+              "Public pages only"
+            ],
+            "viewports": [
+              "desktop",
+              "mobile"
+            ],
+            "findings_cap": 10,
+            "revisions": 1,
+            "deliverables": [
+              "One evidence-based audit report with up to 10 prioritized findings"
+            ],
+            "acceptance_checks": [
+              "Each finding identifies page, viewport, observed evidence and a suggested change"
+            ],
+            "exclusions": [
+              "No code changes, account access, publishing or conversion guarantees"
+            ],
+            "required_inputs": [],
+            "allowed_actions": [
+              "browse_public_pages",
+              "write_audit_report",
+              "deliver_in_bound_room"
+            ],
+            "delivery_timing": "FIXTURE TERMS: delivery target 30 minutes after verified payment and runtime readiness; delays require status update.",
+            "refund_terms": "FIXTURE TERMS: unresolved inability to deliver is referred to operator review; no automated refund promise."
+          },
+          "revision": 0
+        }
+      },
+      "input": {
+        "order_id": "fixture_order_01",
+        "job_id": "fixture_order_01",
+        "attempt_id": "fixture_run_01",
+        "room_id": "fixture_room_02",
+        "quote_hash": "a9f36e472d082769508a6a1d905bc2eaed266dd8e1bdf5076bb49545728a58ec",
+        "revision": 0,
+        "report": {
+          "artifact_id": "fixture_report_01",
+          "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "media_type": "text/markdown"
+        },
+        "findings_count": 0,
+        "limitations": [
+          "Fixture only; no website inspection was performed."
+        ],
+        "completed_at": "2026-10-24T17:10:00.000Z",
+        "mode": "fixture"
+      },
+      "expected": {
+        "code": "BINDING_MISMATCH",
+        "result_persisted": false,
+        "room_send": false
+      }
+    },
+    {
+      "id": "duplicate-dispatch",
+      "operation": "dispatch",
+      "given": {
+        "existing_job": {
+          "schema_version": "wa-v2.1",
+          "order_id": "fixture_order_01",
+          "job_id": "fixture_order_01",
+          "attempt_id": "fixture_run_01",
+          "room_id": "fixture_room_01",
+          "quote_id": "fixture_quote_01",
+          "quote_hash": "a9f36e472d082769508a6a1d905bc2eaed266dd8e1bdf5076bb49545728a58ec",
+          "service_version": "website_audit_v1",
+          "buyer_id": "fixture_buyer_01",
+          "prompt_version": "auditor-v1",
+          "mode": "fixture",
+          "scope": {
+            "site_url": "https://fixture.example/",
+            "scope_summary": "Audit the homepage and pricing page for clarity and mobile usability.",
+            "pages": [
+              "https://fixture.example/",
+              "https://fixture.example/pricing"
+            ],
+            "excluded_pages": [
+              "https://fixture.example/login"
+            ],
+            "goal": "Improve clarity and mobile usability",
+            "constraints": [
+              "No site edits",
+              "Public pages only"
+            ],
+            "viewports": [
+              "desktop",
+              "mobile"
+            ],
+            "findings_cap": 10,
+            "revisions": 1,
+            "deliverables": [
+              "One evidence-based audit report with up to 10 prioritized findings"
+            ],
+            "acceptance_checks": [
+              "Each finding identifies page, viewport, observed evidence and a suggested change"
+            ],
+            "exclusions": [
+              "No code changes, account access, publishing or conversion guarantees"
+            ],
+            "required_inputs": [],
+            "allowed_actions": [
+              "browse_public_pages",
+              "write_audit_report",
+              "deliver_in_bound_room"
+            ],
+            "delivery_timing": "FIXTURE TERMS: delivery target 30 minutes after verified payment and runtime readiness; delays require status update.",
+            "refund_terms": "FIXTURE TERMS: unresolved inability to deliver is referred to operator review; no automated refund promise."
+          },
+          "revision": 0
+        },
+        "existing_dispatch": {
+          "job_id": "fixture_order_01",
+          "attempt_id": "fixture_run_01",
+          "state": "running"
+        },
+        "prior_request_id": "fixture_run_0001"
+      },
+      "input": {
+        "request_id": "fixture_run_0001",
+        "job": {
+          "schema_version": "wa-v2.1",
+          "order_id": "fixture_order_01",
+          "job_id": "fixture_order_01",
+          "attempt_id": "fixture_run_01",
+          "room_id": "fixture_room_01",
+          "quote_id": "fixture_quote_01",
+          "quote_hash": "a9f36e472d082769508a6a1d905bc2eaed266dd8e1bdf5076bb49545728a58ec",
+          "service_version": "website_audit_v1",
+          "buyer_id": "fixture_buyer_01",
+          "prompt_version": "auditor-v1",
+          "mode": "fixture",
+          "scope": {
+            "site_url": "https://fixture.example/",
+            "scope_summary": "Audit the homepage and pricing page for clarity and mobile usability.",
+            "pages": [
+              "https://fixture.example/",
+              "https://fixture.example/pricing"
+            ],
+            "excluded_pages": [
+              "https://fixture.example/login"
+            ],
+            "goal": "Improve clarity and mobile usability",
+            "constraints": [
+              "No site edits",
+              "Public pages only"
+            ],
+            "viewports": [
+              "desktop",
+              "mobile"
+            ],
+            "findings_cap": 10,
+            "revisions": 1,
+            "deliverables": [
+              "One evidence-based audit report with up to 10 prioritized findings"
+            ],
+            "acceptance_checks": [
+              "Each finding identifies page, viewport, observed evidence and a suggested change"
+            ],
+            "exclusions": [
+              "No code changes, account access, publishing or conversion guarantees"
+            ],
+            "required_inputs": [],
+            "allowed_actions": [
+              "browse_public_pages",
+              "write_audit_report",
+              "deliver_in_bound_room"
+            ],
+            "delivery_timing": "FIXTURE TERMS: delivery target 30 minutes after verified payment and runtime readiness; delays require status update.",
+            "refund_terms": "FIXTURE TERMS: unresolved inability to deliver is referred to operator review; no automated refund promise."
+          },
+          "revision": 0
+        }
+      },
+      "expected": {
+        "job_id": "fixture_order_01",
+        "attempt_id": "fixture_run_01",
+        "new_attempts": 0,
+        "new_remote_starts": 0
+      }
+    },
+    {
+      "id": "runtime-unavailable",
+      "operation": "dispatch",
+      "given": {
+        "payment_verified": true,
+        "room_access_verified": true,
+        "runtime_ready": false
+      },
+      "input": {
+        "job": {
+          "schema_version": "wa-v2.1",
+          "order_id": "fixture_order_01",
+          "job_id": "fixture_order_01",
+          "attempt_id": "fixture_run_01",
+          "room_id": "fixture_room_01",
+          "quote_id": "fixture_quote_01",
+          "quote_hash": "a9f36e472d082769508a6a1d905bc2eaed266dd8e1bdf5076bb49545728a58ec",
+          "service_version": "website_audit_v1",
+          "buyer_id": "fixture_buyer_01",
+          "prompt_version": "auditor-v1",
+          "mode": "fixture",
+          "scope": {
+            "site_url": "https://fixture.example/",
+            "scope_summary": "Audit the homepage and pricing page for clarity and mobile usability.",
+            "pages": [
+              "https://fixture.example/",
+              "https://fixture.example/pricing"
+            ],
+            "excluded_pages": [
+              "https://fixture.example/login"
+            ],
+            "goal": "Improve clarity and mobile usability",
+            "constraints": [
+              "No site edits",
+              "Public pages only"
+            ],
+            "viewports": [
+              "desktop",
+              "mobile"
+            ],
+            "findings_cap": 10,
+            "revisions": 1,
+            "deliverables": [
+              "One evidence-based audit report with up to 10 prioritized findings"
+            ],
+            "acceptance_checks": [
+              "Each finding identifies page, viewport, observed evidence and a suggested change"
+            ],
+            "exclusions": [
+              "No code changes, account access, publishing or conversion guarantees"
+            ],
+            "required_inputs": [],
+            "allowed_actions": [
+              "browse_public_pages",
+              "write_audit_report",
+              "deliver_in_bound_room"
+            ],
+            "delivery_timing": "FIXTURE TERMS: delivery target 30 minutes after verified payment and runtime readiness; delays require status update.",
+            "refund_terms": "FIXTURE TERMS: unresolved inability to deliver is referred to operator review; no automated refund promise."
+          },
+          "revision": 0
+        }
+      },
+      "expected": {
+        "state": "paid_waiting",
+        "reason": "runtime_unavailable",
+        "durable_job_retained": true,
+        "new_remote_starts": 0
+      }
+    },
+    {
+      "id": "internal-purchase-with-referral",
+      "operation": "project_public_stats",
+      "given": {
+        "environment": "live",
+        "customer_classification": "internal",
+        "classification_source": "operator_internal_test_record",
+        "receipt_verified": true,
+        "amount_minor": 1900,
+        "refunded_minor": 0,
+        "ref": "fixture_lead_01"
+      },
+      "input": {},
+      "expected": {
+        "external_live_gross_delta_minor": 0,
+        "internal_live_gross_delta_minor": 1900,
+        "referral_retained": true
+      }
+    },
+    {
+      "id": "unknown-customer-with-referral",
+      "operation": "project_public_stats",
+      "given": {
+        "environment": "live",
+        "customer_classification": "unknown",
+        "receipt_verified": true,
+        "amount_minor": 1900,
+        "ref": "fixture_lead_01"
+      },
+      "input": {},
+      "expected": {
+        "external_live_gross_delta_minor": 0,
+        "unknown_live_gross_delta_minor": 1900
+      }
+    },
+    {
+      "id": "sandbox-external-customer",
+      "operation": "project_public_stats",
+      "given": {
+        "environment": "sandbox",
+        "customer_classification": "confirmed_external",
+        "receipt_verified": true,
+        "amount_minor": 1900
+      },
+      "input": {},
+      "expected": {
+        "external_live_gross_delta_minor": 0,
+        "sandbox_gross_delta_minor": 1900
+      }
+    },
+    {
+      "id": "expired-capability",
+      "operation": "quote",
+      "given": {
+        "expires_at": "2026-10-24T16:59:59.000Z",
+        "now": "2026-10-24T17:00:00.000Z",
+        "membership_valid": true
+      },
+      "input": {
+        "site_url": "https://fixture.example/",
+        "scope_summary": "Audit the homepage and pricing page for clarity and mobile usability.",
+        "pages": [
+          "https://fixture.example/",
+          "https://fixture.example/pricing"
+        ],
+        "findings_cap": 10,
+        "request_id": "fixture_quote_0001"
+      },
+      "expected": {
+        "code": "FORBIDDEN",
+        "new_quotes": 0
+      }
+    },
+    {
+      "id": "revoked-membership",
+      "operation": "quote",
+      "given": {
+        "membership_valid": false,
+        "revoked_at": "2026-10-24T16:59:00.000Z"
+      },
+      "input": {
+        "site_url": "https://fixture.example/",
+        "scope_summary": "Audit the homepage and pricing page for clarity and mobile usability.",
+        "pages": [
+          "https://fixture.example/",
+          "https://fixture.example/pricing"
+        ],
+        "findings_cap": 10,
+        "request_id": "fixture_quote_0001"
+      },
+      "expected": {
+        "code": "FORBIDDEN",
+        "new_quotes": 0
+      }
+    },
+    {
+      "id": "same-key-different-scope",
+      "operation": "quote",
+      "given": {
+        "prior_request_id": "fixture_quote_0001",
+        "prior_payload": {
+          "site_url": "https://fixture.example/",
+          "scope_summary": "Audit the homepage and pricing page for clarity and mobile usability.",
+          "pages": [
+            "https://fixture.example/",
+            "https://fixture.example/pricing"
+          ],
+          "findings_cap": 10,
+          "request_id": "fixture_quote_0001"
+        }
+      },
+      "input": {
+        "site_url": "https://fixture.example/",
+        "scope_summary": "Also edit the website",
+        "pages": [
+          "https://fixture.example/",
+          "https://fixture.example/pricing"
+        ],
+        "findings_cap": 10,
+        "request_id": "fixture_quote_0001"
+      },
+      "expected": {
+        "code": "CONFLICT",
+        "new_quotes": 0
+      }
+    },
+    {
+      "id": "lost-runtime-start-response",
+      "operation": "dispatch",
+      "given": {
+        "start_outcome": "unknown",
+        "runtime_lookup_supported": false
+      },
+      "input": {
+        "job": {
+          "schema_version": "wa-v2.1",
+          "order_id": "fixture_order_01",
+          "job_id": "fixture_order_01",
+          "attempt_id": "fixture_run_01",
+          "room_id": "fixture_room_01",
+          "quote_id": "fixture_quote_01",
+          "quote_hash": "a9f36e472d082769508a6a1d905bc2eaed266dd8e1bdf5076bb49545728a58ec",
+          "service_version": "website_audit_v1",
+          "buyer_id": "fixture_buyer_01",
+          "prompt_version": "auditor-v1",
+          "mode": "fixture",
+          "scope": {
+            "site_url": "https://fixture.example/",
+            "scope_summary": "Audit the homepage and pricing page for clarity and mobile usability.",
+            "pages": [
+              "https://fixture.example/",
+              "https://fixture.example/pricing"
+            ],
+            "excluded_pages": [
+              "https://fixture.example/login"
+            ],
+            "goal": "Improve clarity and mobile usability",
+            "constraints": [
+              "No site edits",
+              "Public pages only"
+            ],
+            "viewports": [
+              "desktop",
+              "mobile"
+            ],
+            "findings_cap": 10,
+            "revisions": 1,
+            "deliverables": [
+              "One evidence-based audit report with up to 10 prioritized findings"
+            ],
+            "acceptance_checks": [
+              "Each finding identifies page, viewport, observed evidence and a suggested change"
+            ],
+            "exclusions": [
+              "No code changes, account access, publishing or conversion guarantees"
+            ],
+            "required_inputs": [],
+            "allowed_actions": [
+              "browse_public_pages",
+              "write_audit_report",
+              "deliver_in_bound_room"
+            ],
+            "delivery_timing": "FIXTURE TERMS: delivery target 30 minutes after verified payment and runtime readiness; delays require status update.",
+            "refund_terms": "FIXTURE TERMS: unresolved inability to deliver is referred to operator review; no automated refund promise."
+          },
+          "revision": 0
+        }
+      },
+      "expected": {
+        "state": "needs_attention",
+        "reason": "unknown_start_outcome",
+        "new_remote_starts": 0
+      }
+    },
+    {
+      "id": "stale-result-attempt",
+      "operation": "submit_result",
+      "given": {
+        "current_attempt_id": "fixture_run_02"
+      },
+      "input": {
+        "order_id": "fixture_order_01",
+        "job_id": "fixture_order_01",
+        "attempt_id": "fixture_run_01",
+        "room_id": "fixture_room_01",
+        "quote_hash": "a9f36e472d082769508a6a1d905bc2eaed266dd8e1bdf5076bb49545728a58ec",
+        "revision": 0,
+        "report": {
+          "artifact_id": "fixture_report_01",
+          "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "media_type": "text/markdown"
+        },
+        "findings_count": 0,
+        "limitations": [
+          "Fixture only; no website inspection was performed."
+        ],
+        "completed_at": "2026-10-24T17:10:00.000Z",
+        "mode": "fixture"
+      },
+      "expected": {
+        "code": "CONFLICT",
+        "result_persisted": false,
+        "room_send": false
+      }
+    },
+    {
+      "id": "refund-during-execution",
+      "operation": "next_tool_action",
+      "given": {
+        "current_job": {
+          "schema_version": "wa-v2.1",
+          "order_id": "fixture_order_01",
+          "job_id": "fixture_order_01",
+          "attempt_id": "fixture_run_01",
+          "room_id": "fixture_room_01",
+          "quote_id": "fixture_quote_01",
+          "quote_hash": "a9f36e472d082769508a6a1d905bc2eaed266dd8e1bdf5076bb49545728a58ec",
+          "service_version": "website_audit_v1",
+          "buyer_id": "fixture_buyer_01",
+          "prompt_version": "auditor-v1",
+          "mode": "fixture",
+          "scope": {
+            "site_url": "https://fixture.example/",
+            "scope_summary": "Audit the homepage and pricing page for clarity and mobile usability.",
+            "pages": [
+              "https://fixture.example/",
+              "https://fixture.example/pricing"
+            ],
+            "excluded_pages": [
+              "https://fixture.example/login"
+            ],
+            "goal": "Improve clarity and mobile usability",
+            "constraints": [
+              "No site edits",
+              "Public pages only"
+            ],
+            "viewports": [
+              "desktop",
+              "mobile"
+            ],
+            "findings_cap": 10,
+            "revisions": 1,
+            "deliverables": [
+              "One evidence-based audit report with up to 10 prioritized findings"
+            ],
+            "acceptance_checks": [
+              "Each finding identifies page, viewport, observed evidence and a suggested change"
+            ],
+            "exclusions": [
+              "No code changes, account access, publishing or conversion guarantees"
+            ],
+            "required_inputs": [],
+            "allowed_actions": [
+              "browse_public_pages",
+              "write_audit_report",
+              "deliver_in_bound_room"
+            ],
+            "delivery_timing": "FIXTURE TERMS: delivery target 30 minutes after verified payment and runtime readiness; delays require status update.",
+            "refund_terms": "FIXTURE TERMS: unresolved inability to deliver is referred to operator review; no automated refund promise."
+          },
+          "revision": 0
+        },
+        "refund_status": "partial",
+        "prior_action_completed": true
+      },
+      "input": {
+        "action": "browse_public_pages"
+      },
+      "expected": {
+        "future_actions_authorized": false,
+        "cancel_requested": true,
+        "prior_action_erased": false
+      }
+    },
+    {
+      "id": "duplicate-delivery-send-unknown",
+      "operation": "deliver",
+      "given": {
+        "artifact_persisted": true,
+        "send_outcome": "unknown",
+        "provider_lookup_supported": false
+      },
+      "input": {
+        "job_id": "fixture_order_01",
+        "attempt_id": "fixture_run_01",
+        "artifact_id": "fixture_report_01"
+      },
+      "expected": {
+        "state": "needs_attention",
+        "new_sends": 0,
+        "delivered_record_created": false
+      }
+    },
+    {
+      "id": "forged-rating-provenance",
+      "operation": "record_rating",
+      "given": {
+        "source_actor": "fixture_specialist_01",
+        "bound_buyer_id": "fixture_buyer_01",
+        "order_state": "delivered"
+      },
+      "input": {
+        "order_id": "fixture_order_01",
+        "source_message_id": "fixture_specialist_msg",
+        "score": 5
+      },
+      "expected": {
+        "code": "FORBIDDEN",
+        "ratings_added": 0
+      }
+    },
+    {
+      "id": "buyer-silence",
+      "operation": "advance_work_state",
+      "given": {
+        "state": "delivered",
+        "buyer_message": null
+      },
+      "input": {},
+      "expected": {
+        "state": "delivered",
+        "ratings_added": 0
+      }
+    },
+    {
+      "id": "second-revision-request",
+      "operation": "request_revision",
+      "given": {
+        "revisions_used": 1,
+        "state": "revised"
+      },
+      "input": {
+        "order_id": "fixture_order_01",
+        "source_message_id": "fixture_buyer_msg_03",
+        "request_id": "fixture_revision_02",
+        "changes": "Another pass"
+      },
+      "expected": {
+        "code": "CONFLICT",
+        "new_attempts": 0
+      }
+    },
+    {
+      "id": "private-network-redirect",
+      "operation": "browse_public_pages",
+      "given": {
+        "redirect_target": "http://127.0.0.1/internal",
+        "job": {
+          "schema_version": "wa-v2.1",
+          "order_id": "fixture_order_01",
+          "job_id": "fixture_order_01",
+          "attempt_id": "fixture_run_01",
+          "room_id": "fixture_room_01",
+          "quote_id": "fixture_quote_01",
+          "quote_hash": "a9f36e472d082769508a6a1d905bc2eaed266dd8e1bdf5076bb49545728a58ec",
+          "service_version": "website_audit_v1",
+          "buyer_id": "fixture_buyer_01",
+          "prompt_version": "auditor-v1",
+          "mode": "fixture",
+          "scope": {
+            "site_url": "https://fixture.example/",
+            "scope_summary": "Audit the homepage and pricing page for clarity and mobile usability.",
+            "pages": [
+              "https://fixture.example/",
+              "https://fixture.example/pricing"
+            ],
+            "excluded_pages": [
+              "https://fixture.example/login"
+            ],
+            "goal": "Improve clarity and mobile usability",
+            "constraints": [
+              "No site edits",
+              "Public pages only"
+            ],
+            "viewports": [
+              "desktop",
+              "mobile"
+            ],
+            "findings_cap": 10,
+            "revisions": 1,
+            "deliverables": [
+              "One evidence-based audit report with up to 10 prioritized findings"
+            ],
+            "acceptance_checks": [
+              "Each finding identifies page, viewport, observed evidence and a suggested change"
+            ],
+            "exclusions": [
+              "No code changes, account access, publishing or conversion guarantees"
+            ],
+            "required_inputs": [],
+            "allowed_actions": [
+              "browse_public_pages",
+              "write_audit_report",
+              "deliver_in_bound_room"
+            ],
+            "delivery_timing": "FIXTURE TERMS: delivery target 30 minutes after verified payment and runtime readiness; delays require status update.",
+            "refund_terms": "FIXTURE TERMS: unresolved inability to deliver is referred to operator review; no automated refund promise."
+          },
+          "revision": 0
+        }
+      },
+      "input": {
+        "url": "https://fixture.example/"
+      },
+      "expected": {
+        "code": "FORBIDDEN",
+        "private_network_request_sent": false
+      }
+    },
+    {
+      "id": "scope-expansion-after-payment",
+      "operation": "request_revision",
+      "given": {
+        "current_job": {
+          "schema_version": "wa-v2.1",
+          "order_id": "fixture_order_01",
+          "job_id": "fixture_order_01",
+          "attempt_id": "fixture_run_01",
+          "room_id": "fixture_room_01",
+          "quote_id": "fixture_quote_01",
+          "quote_hash": "a9f36e472d082769508a6a1d905bc2eaed266dd8e1bdf5076bb49545728a58ec",
+          "service_version": "website_audit_v1",
+          "buyer_id": "fixture_buyer_01",
+          "prompt_version": "auditor-v1",
+          "mode": "fixture",
+          "scope": {
+            "site_url": "https://fixture.example/",
+            "scope_summary": "Audit the homepage and pricing page for clarity and mobile usability.",
+            "pages": [
+              "https://fixture.example/",
+              "https://fixture.example/pricing"
+            ],
+            "excluded_pages": [
+              "https://fixture.example/login"
+            ],
+            "goal": "Improve clarity and mobile usability",
+            "constraints": [
+              "No site edits",
+              "Public pages only"
+            ],
+            "viewports": [
+              "desktop",
+              "mobile"
+            ],
+            "findings_cap": 10,
+            "revisions": 1,
+            "deliverables": [
+              "One evidence-based audit report with up to 10 prioritized findings"
+            ],
+            "acceptance_checks": [
+              "Each finding identifies page, viewport, observed evidence and a suggested change"
+            ],
+            "exclusions": [
+              "No code changes, account access, publishing or conversion guarantees"
+            ],
+            "required_inputs": [],
+            "allowed_actions": [
+              "browse_public_pages",
+              "write_audit_report",
+              "deliver_in_bound_room"
+            ],
+            "delivery_timing": "FIXTURE TERMS: delivery target 30 minutes after verified payment and runtime readiness; delays require status update.",
+            "refund_terms": "FIXTURE TERMS: unresolved inability to deliver is referred to operator review; no automated refund promise."
+          },
+          "revision": 0
+        },
+        "revisions_used": 0
+      },
+      "input": {
+        "order_id": "fixture_order_01",
+        "source_message_id": "fixture_buyer_msg_04",
+        "request_id": "fixture_revision_03",
+        "changes": "Audit six new pages and publish fixes"
+      },
+      "expected": {
+        "code": "QUOTE_INELIGIBLE",
+        "paid_scope_mutated": false,
+        "new_attempts": 0
+      }
+    }
+  ]
+}

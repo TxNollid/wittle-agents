@@ -1,0 +1,110 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:wittle:agents:wa-v2.1",
+  "title": "Wittle Agents wa-v2.1 — proposed adapter data, not provider endpoints",
+  "$comment": "Validate a named $defs entry. JSON Schema checks shape only. Authorization, provenance, hash equality, eligibility, URL safety and replay semantics require the trusted adapters described in product/wittle-agents-v2-contracts.md.",
+  "$defs": {
+    "Id": {"type":"string","minLength":1,"maxLength":200,"pattern":"^[A-Za-z0-9_-]+$"},
+    "RetryKey": {"type":"string","pattern":"^[A-Za-z0-9_-]{8,100}$"},
+    "Hash": {"type":"string","pattern":"^[a-f0-9]{64}$"},
+    "Text": {"type":"string","minLength":1,"maxLength":2000},
+    "Time": {"type":"string","format":"date-time","pattern":"Z$"},
+    "Url": {"type":"string","format":"uri","pattern":"^https?://[^/@?#\\s]+(?:[/?#][^\\s]*)?$","maxLength":2000},
+    "Mode": {"enum":["fixture","sandbox","live"]},
+    "EvidenceLevel": {"enum":["fixture","local_execution","provider","external_customer"]},
+    "CapabilityRecord": {
+      "type":"object","additionalProperties":false,
+      "required":["capability_id","buyer_id","room_id","agent_id","job_id","operations","membership_id","source_event_id","verified_at","issued_at","expires_at","revoked_at"],
+      "properties":{"capability_id":{"$ref":"#/$defs/Id"},"buyer_id":{"$ref":"#/$defs/Id"},"room_id":{"$ref":"#/$defs/Id"},"agent_id":{"$ref":"#/$defs/Id"},"job_id":{"anyOf":[{"$ref":"#/$defs/Id"},{"type":"null"}]},"operations":{"type":"array","minItems":1,"uniqueItems":true,"items":{"enum":["quote","order_status","record_event","submit_result","deliver","request_revision","record_rating"]}},"membership_id":{"$ref":"#/$defs/Id"},"source_event_id":{"$ref":"#/$defs/Id"},"verified_at":{"$ref":"#/$defs/Time"},"issued_at":{"$ref":"#/$defs/Time"},"expires_at":{"$ref":"#/$defs/Time"},"revoked_at":{"anyOf":[{"$ref":"#/$defs/Time"},{"type":"null"}]}}
+    },
+    "PaymentAcceptance": {
+      "type":"object","additionalProperties":false,
+      "required":["order_id","quote_id","quote_hash","buyer_id","room_id","payment_id","source","accepted_at","environment"],
+      "properties":{"order_id":{"$ref":"#/$defs/Id"},"quote_id":{"$ref":"#/$defs/Id"},"quote_hash":{"$ref":"#/$defs/Hash"},"buyer_id":{"$ref":"#/$defs/Id"},"room_id":{"$ref":"#/$defs/Id"},"payment_id":{"$ref":"#/$defs/Id"},"source":{"const":"verified_payment"},"accepted_at":{"$ref":"#/$defs/Time"},"environment":{"enum":["sandbox","live"]}}
+    },
+    "DispatchStatus": {
+      "type":"object","additionalProperties":false,
+      "required":["job_id","attempt_id","state","reason","updated_at"],
+      "properties":{"job_id":{"$ref":"#/$defs/Id"},"attempt_id":{"$ref":"#/$defs/Id"},"state":{"enum":["queued","running","result_ready","cancelled","needs_attention"]},"reason":{"type":["string","null"],"maxLength":200},"updated_at":{"$ref":"#/$defs/Time"}}
+    },
+    "WorkState": {"enum":["quoted","paid_waiting","auditing","delivered","revision_pending","revised","needs_attention","cancelled"]},
+    "Scope": {
+      "type":"object","additionalProperties":false,
+      "required":["site_url","scope_summary","pages","excluded_pages","goal","constraints","viewports","findings_cap","revisions","deliverables","acceptance_checks","exclusions","required_inputs","allowed_actions","delivery_timing","refund_terms"],
+      "properties":{
+        "site_url":{"$ref":"#/$defs/Url"},"scope_summary":{"$ref":"#/$defs/Text"},
+        "pages":{"type":"array","minItems":1,"maxItems":5,"uniqueItems":true,"items":{"$ref":"#/$defs/Url"}},
+        "excluded_pages":{"type":"array","uniqueItems":true,"items":{"$ref":"#/$defs/Url"}},
+        "goal":{"$ref":"#/$defs/Text"},"constraints":{"type":"array","items":{"$ref":"#/$defs/Text"}},
+        "viewports":{"const":["desktop","mobile"]},"findings_cap":{"type":"integer","minimum":1,"maximum":10},"revisions":{"const":1},
+        "deliverables":{"type":"array","minItems":1,"items":{"$ref":"#/$defs/Text"}},
+        "acceptance_checks":{"type":"array","minItems":1,"items":{"$ref":"#/$defs/Text"}},
+        "exclusions":{"type":"array","minItems":1,"items":{"$ref":"#/$defs/Text"}},
+        "required_inputs":{"type":"array","items":{"$ref":"#/$defs/Text"}},
+        "allowed_actions":{"const":["browse_public_pages","write_audit_report","deliver_in_bound_room"]},
+        "delivery_timing":{"$ref":"#/$defs/Text"},"refund_terms":{"$ref":"#/$defs/Text"}
+      }
+    },
+    "QuoteRequest": {
+      "type":"object","additionalProperties":false,"required":["site_url","scope_summary","pages","findings_cap","request_id"],
+      "properties":{"site_url":{"$ref":"#/$defs/Url"},"scope_summary":{"$ref":"#/$defs/Text"},"pages":{"type":"array","minItems":1,"maxItems":5,"uniqueItems":true,"items":{"$ref":"#/$defs/Url"}},"findings_cap":{"type":"integer","minimum":1,"maximum":10},"request_id":{"$ref":"#/$defs/RetryKey"}}
+    },
+    "Offer": {
+      "type":"object","additionalProperties":false,
+      "required":["schema_version","buyer_id","room_id","seller_id","service_id","service_version","provider","environment","company_id","product_id","plan_id","currency","amount_minor","scope","expires_at","version","supersedes"],
+      "properties":{
+        "schema_version":{"const":"wa-v2.1"},"buyer_id":{"$ref":"#/$defs/Id"},"room_id":{"$ref":"#/$defs/Id"},"seller_id":{"$ref":"#/$defs/Id"},"service_id":{"$ref":"#/$defs/Id"},"service_version":{"$ref":"#/$defs/Id"},
+        "provider":{"const":"whop"},"environment":{"enum":["sandbox","live"]},"company_id":{"$ref":"#/$defs/Id"},"product_id":{"$ref":"#/$defs/Id"},"plan_id":{"$ref":"#/$defs/Id"},"currency":{"const":"USD"},"amount_minor":{"type":"integer","minimum":1},
+        "scope":{"$ref":"#/$defs/Scope"},"expires_at":{"$ref":"#/$defs/Time"},"version":{"type":"integer","minimum":1},"supersedes":{"anyOf":[{"$ref":"#/$defs/Id"},{"type":"null"}]}
+      }
+    },
+    "QuoteResponse": {
+      "type":"object","additionalProperties":false,"required":["quote_id","quote_hash","checkout_url","expires_at","offer","mode"],
+      "properties":{"quote_id":{"$ref":"#/$defs/Id"},"quote_hash":{"$ref":"#/$defs/Hash"},"checkout_url":{"$ref":"#/$defs/Url"},"expires_at":{"$ref":"#/$defs/Time"},"offer":{"$ref":"#/$defs/Offer"},"mode":{"$ref":"#/$defs/Mode"}}
+    },
+    "OrderStatusRequest": {"type":"object","additionalProperties":false,"required":["quote_id"],"properties":{"quote_id":{"$ref":"#/$defs/Id"}}},
+    "OrderStatus": {
+      "type":"object","additionalProperties":false,
+      "required":["quote_id","quote_hash","order_id","state","payment_status","refund_status","dispute_status","scope_summary","paid_at","reason","updated_at","mode"],
+      "properties":{"quote_id":{"$ref":"#/$defs/Id"},"quote_hash":{"$ref":"#/$defs/Hash"},"order_id":{"anyOf":[{"$ref":"#/$defs/Id"},{"type":"null"}]},"state":{"$ref":"#/$defs/WorkState"},"payment_status":{"enum":["pending","paid","failed"]},"refund_status":{"enum":["none","pending","partial","full"]},"dispute_status":{"enum":["none","open","won","lost"]},"scope_summary":{"$ref":"#/$defs/Text"},"paid_at":{"anyOf":[{"$ref":"#/$defs/Time"},{"type":"null"}]},"reason":{"type":["string","null"],"maxLength":200},"updated_at":{"$ref":"#/$defs/Time"},"mode":{"$ref":"#/$defs/Mode"}}
+    },
+    "EntryRequest": {"type":"object","additionalProperties":false,"required":["request_id"],"properties":{"request_id":{"$ref":"#/$defs/RetryKey"},"ref":{"$ref":"#/$defs/Id"}}},
+    "EntryResponse": {"type":"object","additionalProperties":false,"required":["room_id","join_url","expires_at","mode"],"properties":{"room_id":{"$ref":"#/$defs/Id"},"join_url":{"$ref":"#/$defs/Url"},"expires_at":{"$ref":"#/$defs/Time"},"mode":{"$ref":"#/$defs/Mode"}}},
+    "Job": {
+      "type":"object","additionalProperties":false,
+      "required":["schema_version","order_id","job_id","attempt_id","buyer_id","room_id","quote_id","quote_hash","service_version","prompt_version","mode","scope","revision"],
+      "properties":{"schema_version":{"const":"wa-v2.1"},"order_id":{"$ref":"#/$defs/Id"},"job_id":{"$ref":"#/$defs/Id"},"attempt_id":{"$ref":"#/$defs/Id"},"buyer_id":{"$ref":"#/$defs/Id"},"room_id":{"$ref":"#/$defs/Id"},"quote_id":{"$ref":"#/$defs/Id"},"quote_hash":{"$ref":"#/$defs/Hash"},"service_version":{"$ref":"#/$defs/Id"},"prompt_version":{"$ref":"#/$defs/Id"},"mode":{"$ref":"#/$defs/Mode"},"scope":{"$ref":"#/$defs/Scope"},"revision":{"type":"integer","minimum":0,"maximum":1}}
+    },
+    "ClaimRequest": {"type":"object","additionalProperties":false,"required":["request_id"],"properties":{"request_id":{"$ref":"#/$defs/RetryKey"}}},
+    "CancelRequest": {"type":"object","additionalProperties":false,"required":["job_id","attempt_id","request_id","reason"],"properties":{"job_id":{"$ref":"#/$defs/Id"},"attempt_id":{"$ref":"#/$defs/Id"},"request_id":{"$ref":"#/$defs/RetryKey"},"reason":{"enum":["refund","dispute","quote_cancelled","access_revoked","operator_stop"]}}},
+    "Artifact": {"type":"object","additionalProperties":false,"required":["artifact_id","sha256","media_type"],"properties":{"artifact_id":{"$ref":"#/$defs/Id"},"sha256":{"$ref":"#/$defs/Hash"},"media_type":{"enum":["text/markdown","application/json"]}}},
+    "Result": {
+      "type":"object","additionalProperties":false,
+      "required":["order_id","job_id","attempt_id","room_id","quote_hash","revision","report","findings_count","limitations","completed_at","mode"],
+      "properties":{"order_id":{"$ref":"#/$defs/Id"},"job_id":{"$ref":"#/$defs/Id"},"attempt_id":{"$ref":"#/$defs/Id"},"room_id":{"$ref":"#/$defs/Id"},"quote_hash":{"$ref":"#/$defs/Hash"},"revision":{"type":"integer","minimum":0,"maximum":1},"report":{"$ref":"#/$defs/Artifact"},"findings_count":{"type":"integer","minimum":0,"maximum":10},"limitations":{"type":"array","items":{"$ref":"#/$defs/Text"}},"completed_at":{"$ref":"#/$defs/Time"},"mode":{"$ref":"#/$defs/Mode"}}
+    },
+    "Delivery": {"type":"object","additionalProperties":false,"required":["order_id","job_id","attempt_id","room_id","quote_hash","artifact_id","revision","message_id","delivered_at","mode"],"properties":{"order_id":{"$ref":"#/$defs/Id"},"job_id":{"$ref":"#/$defs/Id"},"attempt_id":{"$ref":"#/$defs/Id"},"room_id":{"$ref":"#/$defs/Id"},"quote_hash":{"$ref":"#/$defs/Hash"},"artifact_id":{"$ref":"#/$defs/Id"},"revision":{"type":"integer","minimum":0,"maximum":1},"message_id":{"$ref":"#/$defs/Id"},"delivered_at":{"$ref":"#/$defs/Time"},"mode":{"$ref":"#/$defs/Mode"}}},
+    "RevisionRequest": {"type":"object","additionalProperties":false,"required":["order_id","source_message_id","request_id","changes"],"properties":{"order_id":{"$ref":"#/$defs/Id"},"source_message_id":{"$ref":"#/$defs/Id"},"request_id":{"$ref":"#/$defs/RetryKey"},"changes":{"$ref":"#/$defs/Text"}}},
+    "RatingRequest": {"type":"object","additionalProperties":false,"required":["order_id","source_message_id","score"],"properties":{"order_id":{"$ref":"#/$defs/Id"},"source_message_id":{"$ref":"#/$defs/Id"},"score":{"type":"integer","minimum":1,"maximum":5}}},
+    "RecordEventRequest": {
+      "type":"object","additionalProperties":false,"required":["event_id","type","data"],
+      "properties":{"event_id":{"$ref":"#/$defs/RetryKey"},"type":{"enum":["scoping_paused","intervention_recorded"]},"data":{"type":"object","additionalProperties":false,"required":["reason_code"],"properties":{"reason_code":{"enum":["quota_exhausted","no_progress","runtime_unavailable","operator_recovery"]}}}}
+    },
+    "PublicEvent": {"type":"object","additionalProperties":false,"required":["event_id","type","occurred_at","mode","evidence_level"],"properties":{"event_id":{"$ref":"#/$defs/Id"},"type":{"enum":["lead_saved","draft_saved","post_published","room_opened","quote_issued","payment_verified","refund_verified","audit_delivered","rating_recorded","scoping_paused","intervention_recorded"]},"occurred_at":{"$ref":"#/$defs/Time"},"mode":{"$ref":"#/$defs/Mode"},"evidence_level":{"$ref":"#/$defs/EvidenceLevel"}}},
+    "RevenueBucket": {"type":"object","additionalProperties":false,"required":["gross_minor","refunded_minor","net_minor","pending_minor","disputed_minor"],"properties":{"gross_minor":{"type":"integer","minimum":0},"refunded_minor":{"type":"integer","minimum":0},"net_minor":{"type":"integer"},"pending_minor":{"type":["integer","null"],"minimum":0},"disputed_minor":{"type":["integer","null"],"minimum":0}}},
+    "TeracScore": {"type":"object","additionalProperties":false,"required":["reports","responses","usefulness_mean","clarity_mean","would_pay_yes","would_pay_total"],"properties":{"reports":{"type":"integer","minimum":1},"responses":{"type":"integer","minimum":1},"usefulness_mean":{"type":"number","minimum":1,"maximum":7},"clarity_mean":{"type":"number","minimum":1,"maximum":7},"would_pay_yes":{"type":"integer","minimum":0},"would_pay_total":{"type":"integer","minimum":1}}},
+    "PublicStats": {
+      "type":"object","additionalProperties":false,
+      "required":["schema_version","mode","evidence_level","as_of","last_success_at","stale","counts","ratings","revenue","terac","interventions","events"],
+      "properties":{
+        "schema_version":{"const":"wa-v2.1"},"mode":{"$ref":"#/$defs/Mode"},"evidence_level":{"$ref":"#/$defs/EvidenceLevel"},"as_of":{"$ref":"#/$defs/Time"},"last_success_at":{"anyOf":[{"$ref":"#/$defs/Time"},{"type":"null"}]},"stale":{"type":"boolean"},
+        "counts":{"type":"object","additionalProperties":false,"required":["leads","drafts","posts","rooms_opened","quotes","paid_orders","deliveries"],"properties":{"leads":{"type":"integer","minimum":0},"drafts":{"type":"integer","minimum":0},"posts":{"type":"integer","minimum":0},"rooms_opened":{"type":"integer","minimum":0},"quotes":{"type":"integer","minimum":0},"paid_orders":{"type":"integer","minimum":0},"deliveries":{"type":"integer","minimum":0}}},
+        "ratings":{"type":"object","additionalProperties":false,"required":["count","average"],"properties":{"count":{"type":"integer","minimum":0},"average":{"anyOf":[{"type":"number","minimum":1,"maximum":5},{"type":"null"}]}}},
+        "revenue":{"type":"object","additionalProperties":false,"required":["currency","external_live","internal_live","unknown_live","sandbox"],"properties":{"currency":{"const":"USD"},"external_live":{"$ref":"#/$defs/RevenueBucket"},"internal_live":{"$ref":"#/$defs/RevenueBucket"},"unknown_live":{"$ref":"#/$defs/RevenueBucket"},"sandbox":{"$ref":"#/$defs/RevenueBucket"}}},
+        "terac":{"type":"object","additionalProperties":false,"required":["state","v1","v2"],"properties":{"state":{"enum":["blocked","prepared","incomplete","complete"]},"v1":{"anyOf":[{"$ref":"#/$defs/TeracScore"},{"type":"null"}]},"v2":{"anyOf":[{"$ref":"#/$defs/TeracScore"},{"type":"null"}]}}},
+        "interventions":{"type":"integer","minimum":0},"events":{"type":"array","maxItems":20,"items":{"$ref":"#/$defs/PublicEvent"}}
+      }
+    },
+    "Error": {"type":"object","additionalProperties":false,"required":["code","retryable","next_action"],"properties":{"code":{"enum":["INVALID_INPUT","FORBIDDEN","BINDING_MISMATCH","CONFLICT","QUOTE_INELIGIBLE","PAYMENT_INELIGIBLE","QUOTA_EXHAUSTED","RUNTIME_UNAVAILABLE","NEEDS_RECONCILIATION"]},"retryable":{"type":"boolean"},"next_action":{"enum":["correct_input","stop","refresh_status","wait","operator_review"]}}}
+  }
+}

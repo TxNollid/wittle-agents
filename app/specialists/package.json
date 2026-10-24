@@ -1,0 +1,8 @@
+{
+  "name": "@wittle/specialists",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": { ".": "./catalog.mjs", "./slop": "./slop.mjs", "./guide": "./guide.mjs", "./founder-review": "./founder-review.mjs" },
+  "scripts": { "test": "node --test *.test.mjs" }
+}

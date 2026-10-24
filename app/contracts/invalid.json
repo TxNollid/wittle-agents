@@ -1,0 +1,460 @@
+{
+  "contract_revision": "wa-v2.1",
+  "evidence_level": "fixture",
+  "warning": "Shape failures only. Valid shape is not authorization or provider proof.",
+  "cases": [
+    {
+      "id": "model-buyer-room-price-injection",
+      "definition": "QuoteRequest",
+      "payload": {
+        "site_url": "https://fixture.example/",
+        "scope_summary": "Audit the homepage and pricing page for clarity and mobile usability.",
+        "pages": [
+          "https://fixture.example/",
+          "https://fixture.example/pricing"
+        ],
+        "findings_cap": 10,
+        "request_id": "fixture_quote_0001",
+        "buyer_id": "other_buyer",
+        "room_id": "other_room",
+        "amount_minor": 1
+      },
+      "reason": "Authority/price fields are not model arguments"
+    },
+    {
+      "id": "six-pages",
+      "definition": "QuoteRequest",
+      "payload": {
+        "site_url": "https://fixture.example/",
+        "scope_summary": "Audit the homepage and pricing page for clarity and mobile usability.",
+        "pages": [
+          "https://fixture.example/0",
+          "https://fixture.example/1",
+          "https://fixture.example/2",
+          "https://fixture.example/3",
+          "https://fixture.example/4",
+          "https://fixture.example/5"
+        ],
+        "findings_cap": 10,
+        "request_id": "fixture_quote_0001"
+      },
+      "reason": "Maximum five pages"
+    },
+    {
+      "id": "eleven-findings",
+      "definition": "QuoteRequest",
+      "payload": {
+        "site_url": "https://fixture.example/",
+        "scope_summary": "Audit the homepage and pricing page for clarity and mobile usability.",
+        "pages": [
+          "https://fixture.example/",
+          "https://fixture.example/pricing"
+        ],
+        "findings_cap": 11,
+        "request_id": "fixture_quote_0001"
+      },
+      "reason": "Maximum ten findings"
+    },
+    {
+      "id": "duplicate-pages",
+      "definition": "QuoteRequest",
+      "payload": {
+        "site_url": "https://fixture.example/",
+        "scope_summary": "Audit the homepage and pricing page for clarity and mobile usability.",
+        "pages": [
+          "https://fixture.example/",
+          "https://fixture.example/"
+        ],
+        "findings_cap": 10,
+        "request_id": "fixture_quote_0001"
+      },
+      "reason": "Duplicate pages rejected before quote"
+    },
+    {
+      "id": "shell-as-url",
+      "definition": "QuoteRequest",
+      "payload": {
+        "site_url": "file:///etc/passwd",
+        "scope_summary": "Audit the homepage and pricing page for clarity and mobile usability.",
+        "pages": [
+          "https://fixture.example/",
+          "https://fixture.example/pricing"
+        ],
+        "findings_cap": 10,
+        "request_id": "fixture_quote_0001"
+      },
+      "reason": "HTTP(S) only; runtime must additionally enforce public network safety"
+    },
+    {
+      "id": "zero-price",
+      "definition": "Offer",
+      "payload": {
+        "schema_version": "wa-v2.1",
+        "buyer_id": "fixture_buyer_01",
+        "room_id": "fixture_room_01",
+        "seller_id": "fixture_seller_01",
+        "service_id": "website_audit",
+        "service_version": "website_audit_v1",
+        "provider": "whop",
+        "environment": "sandbox",
+        "company_id": "fixture_company",
+        "product_id": "fixture_product",
+        "plan_id": "fixture_plan_19",
+        "currency": "USD",
+        "amount_minor": 0,
+        "scope": {
+          "site_url": "https://fixture.example/",
+          "scope_summary": "Audit the homepage and pricing page for clarity and mobile usability.",
+          "pages": [
+            "https://fixture.example/",
+            "https://fixture.example/pricing"
+          ],
+          "excluded_pages": [
+            "https://fixture.example/login"
+          ],
+          "goal": "Improve clarity and mobile usability",
+          "constraints": [
+            "No site edits",
+            "Public pages only"
+          ],
+          "viewports": [
+            "desktop",
+            "mobile"
+          ],
+          "findings_cap": 10,
+          "revisions": 1,
+          "deliverables": [
+            "One evidence-based audit report with up to 10 prioritized findings"
+          ],
+          "acceptance_checks": [
+            "Each finding identifies page, viewport, observed evidence and a suggested change"
+          ],
+          "exclusions": [
+            "No code changes, account access, publishing or conversion guarantees"
+          ],
+          "required_inputs": [],
+          "allowed_actions": [
+            "browse_public_pages",
+            "write_audit_report",
+            "deliver_in_bound_room"
+          ],
+          "delivery_timing": "FIXTURE TERMS: delivery target 30 minutes after verified payment and runtime readiness; delays require status update.",
+          "refund_terms": "FIXTURE TERMS: unresolved inability to deliver is referred to operator review; no automated refund promise."
+        },
+        "expires_at": "2026-10-24T21:00:00.000Z",
+        "version": 1,
+        "supersedes": null
+      },
+      "reason": "Positive integer minor units"
+    },
+    {
+      "id": "float-price",
+      "definition": "Offer",
+      "payload": {
+        "schema_version": "wa-v2.1",
+        "buyer_id": "fixture_buyer_01",
+        "room_id": "fixture_room_01",
+        "seller_id": "fixture_seller_01",
+        "service_id": "website_audit",
+        "service_version": "website_audit_v1",
+        "provider": "whop",
+        "environment": "sandbox",
+        "company_id": "fixture_company",
+        "product_id": "fixture_product",
+        "plan_id": "fixture_plan_19",
+        "currency": "USD",
+        "amount_minor": 19.99,
+        "scope": {
+          "site_url": "https://fixture.example/",
+          "scope_summary": "Audit the homepage and pricing page for clarity and mobile usability.",
+          "pages": [
+            "https://fixture.example/",
+            "https://fixture.example/pricing"
+          ],
+          "excluded_pages": [
+            "https://fixture.example/login"
+          ],
+          "goal": "Improve clarity and mobile usability",
+          "constraints": [
+            "No site edits",
+            "Public pages only"
+          ],
+          "viewports": [
+            "desktop",
+            "mobile"
+          ],
+          "findings_cap": 10,
+          "revisions": 1,
+          "deliverables": [
+            "One evidence-based audit report with up to 10 prioritized findings"
+          ],
+          "acceptance_checks": [
+            "Each finding identifies page, viewport, observed evidence and a suggested change"
+          ],
+          "exclusions": [
+            "No code changes, account access, publishing or conversion guarantees"
+          ],
+          "required_inputs": [],
+          "allowed_actions": [
+            "browse_public_pages",
+            "write_audit_report",
+            "deliver_in_bound_room"
+          ],
+          "delivery_timing": "FIXTURE TERMS: delivery target 30 minutes after verified payment and runtime readiness; delays require status update.",
+          "refund_terms": "FIXTURE TERMS: unresolved inability to deliver is referred to operator review; no automated refund promise."
+        },
+        "expires_at": "2026-10-24T21:00:00.000Z",
+        "version": 1,
+        "supersedes": null
+      },
+      "reason": "Minor units are integers"
+    },
+    {
+      "id": "scope-policy-escalation",
+      "definition": "Scope",
+      "payload": {
+        "site_url": "https://fixture.example/",
+        "scope_summary": "Audit the homepage and pricing page for clarity and mobile usability.",
+        "pages": [
+          "https://fixture.example/",
+          "https://fixture.example/pricing"
+        ],
+        "excluded_pages": [
+          "https://fixture.example/login"
+        ],
+        "goal": "Improve clarity and mobile usability",
+        "constraints": [
+          "No site edits",
+          "Public pages only"
+        ],
+        "viewports": [
+          "desktop",
+          "mobile"
+        ],
+        "findings_cap": 10,
+        "revisions": 1,
+        "deliverables": [
+          "One evidence-based audit report with up to 10 prioritized findings"
+        ],
+        "acceptance_checks": [
+          "Each finding identifies page, viewport, observed evidence and a suggested change"
+        ],
+        "exclusions": [
+          "No code changes, account access, publishing or conversion guarantees"
+        ],
+        "required_inputs": [],
+        "allowed_actions": [
+          "browse_public_pages",
+          "run_shell"
+        ],
+        "delivery_timing": "FIXTURE TERMS: delivery target 30 minutes after verified payment and runtime readiness; delays require status update.",
+        "refund_terms": "FIXTURE TERMS: unresolved inability to deliver is referred to operator review; no automated refund promise."
+      },
+      "reason": "No model-granted shell action"
+    },
+    {
+      "id": "second-revision-job",
+      "definition": "Job",
+      "payload": {
+        "schema_version": "wa-v2.1",
+        "order_id": "fixture_order_01",
+        "job_id": "fixture_order_01",
+        "attempt_id": "fixture_run_01",
+        "room_id": "fixture_room_01",
+        "quote_id": "fixture_quote_01",
+        "quote_hash": "a9f36e472d082769508a6a1d905bc2eaed266dd8e1bdf5076bb49545728a58ec",
+        "service_version": "website_audit_v1",
+        "buyer_id": "fixture_buyer_01",
+        "prompt_version": "auditor-v1",
+        "mode": "fixture",
+        "scope": {
+          "site_url": "https://fixture.example/",
+          "scope_summary": "Audit the homepage and pricing page for clarity and mobile usability.",
+          "pages": [
+            "https://fixture.example/",
+            "https://fixture.example/pricing"
+          ],
+          "excluded_pages": [
+            "https://fixture.example/login"
+          ],
+          "goal": "Improve clarity and mobile usability",
+          "constraints": [
+            "No site edits",
+            "Public pages only"
+          ],
+          "viewports": [
+            "desktop",
+            "mobile"
+          ],
+          "findings_cap": 10,
+          "revisions": 1,
+          "deliverables": [
+            "One evidence-based audit report with up to 10 prioritized findings"
+          ],
+          "acceptance_checks": [
+            "Each finding identifies page, viewport, observed evidence and a suggested change"
+          ],
+          "exclusions": [
+            "No code changes, account access, publishing or conversion guarantees"
+          ],
+          "required_inputs": [],
+          "allowed_actions": [
+            "browse_public_pages",
+            "write_audit_report",
+            "deliver_in_bound_room"
+          ],
+          "delivery_timing": "FIXTURE TERMS: delivery target 30 minutes after verified payment and runtime readiness; delays require status update.",
+          "refund_terms": "FIXTURE TERMS: unresolved inability to deliver is referred to operator review; no automated refund promise."
+        },
+        "revision": 2
+      },
+      "reason": "Only initial plus one revision"
+    },
+    {
+      "id": "rating-out-of-range",
+      "definition": "RatingRequest",
+      "payload": {
+        "order_id": "fixture_order_01",
+        "source_message_id": "fixture_message_01",
+        "score": 6
+      },
+      "reason": "Rating range 1–5"
+    },
+    {
+      "id": "forged-paid-event",
+      "definition": "RecordEventRequest",
+      "payload": {
+        "event_id": "fixture_event_forged",
+        "type": "payment_verified",
+        "data": {
+          "reason_code": "operator_recovery"
+        }
+      },
+      "reason": "Payment provenance cannot come from generic model events"
+    },
+    {
+      "id": "forged-rating-event",
+      "definition": "RecordEventRequest",
+      "payload": {
+        "event_id": "fixture_event_rating",
+        "type": "rating_recorded",
+        "data": {
+          "score": 5
+        }
+      },
+      "reason": "Use trusted attributable buyer-message adapter, not generic events"
+    },
+    {
+      "id": "public-room-link-leak",
+      "definition": "PublicEvent",
+      "payload": {
+        "event_id": "fixture_event_leak",
+        "type": "room_opened",
+        "occurred_at": "2026-10-24T17:00:00.000Z",
+        "mode": "fixture",
+        "evidence_level": "fixture",
+        "join_url": "https://rooms.fixture.example/join/private"
+      },
+      "reason": "Public projection whitelist excludes private join links"
+    },
+    {
+      "id": "missing-evidence-label",
+      "definition": "PublicStats",
+      "payload": {
+        "schema_version": "wa-v2.1",
+        "mode": "fixture",
+        "as_of": "2026-10-24T17:10:00.000Z",
+        "last_success_at": null,
+        "stale": true,
+        "counts": {
+          "leads": 1,
+          "drafts": 1,
+          "posts": 0,
+          "rooms_opened": 1,
+          "quotes": 1,
+          "paid_orders": 1,
+          "deliveries": 0
+        },
+        "ratings": {
+          "count": 0,
+          "average": null
+        },
+        "revenue": {
+          "currency": "USD",
+          "external_live": {
+            "gross_minor": 0,
+            "refunded_minor": 0,
+            "pending_minor": 0,
+            "disputed_minor": 0,
+            "net_minor": 0
+          },
+          "internal_live": {
+            "gross_minor": 0,
+            "refunded_minor": 0,
+            "pending_minor": 0,
+            "disputed_minor": 0,
+            "net_minor": 0
+          },
+          "unknown_live": {
+            "gross_minor": 0,
+            "refunded_minor": 0,
+            "pending_minor": 0,
+            "disputed_minor": 0,
+            "net_minor": 0
+          },
+          "sandbox": {
+            "gross_minor": 1900,
+            "refunded_minor": 0,
+            "pending_minor": 0,
+            "disputed_minor": 0,
+            "net_minor": 1900
+          }
+        },
+        "terac": {
+          "state": "blocked",
+          "v1": null,
+          "v2": null
+        },
+        "interventions": 1,
+        "events": [
+          {
+            "event_id": "fixture_event_01",
+            "type": "payment_verified",
+            "occurred_at": "2026-10-24T17:00:00.000Z",
+            "mode": "fixture"
+          }
+        ]
+      },
+      "reason": "Fixture/provider evidence level is mandatory independent of mode"
+    },
+    {
+      "id": "missing-membership-provenance",
+      "definition": "CapabilityRecord",
+      "payload": {
+        "capability_id": "fixture_capability_01",
+        "buyer_id": "fixture_buyer_01",
+        "room_id": "fixture_room_01",
+        "agent_id": "fixture_host_01",
+        "job_id": null,
+        "operations": [
+          "quote"
+        ],
+        "issued_at": "2026-10-24T16:50:00.000Z",
+        "expires_at": "2026-10-24T17:05:00.000Z",
+        "revoked_at": null
+      },
+      "reason": "A typed room ID is not membership provenance"
+    },
+    {
+      "id": "nonutc-expiry",
+      "definition": "EntryResponse",
+      "payload": {
+        "room_id": "fixture_room_01",
+        "join_url": "https://rooms.fixture.example/join/room-01",
+        "expires_at": "2026-10-24T17:00:00-04:00",
+        "mode": "fixture"
+      },
+      "reason": "Wire times use UTC Z"
+    }
+  ]
+}

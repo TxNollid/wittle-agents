@@ -1,0 +1,45 @@
+// Current wittlelabs.ai butterfly mark; preserved from its Fieldglow header.
+export default function BrandMark({ size = 44 }) {
+  return (
+    <svg
+      className="brand-mark"
+      width={size}
+      height={size}
+      viewBox="0 0 64 64"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path
+        d="M30.6 30.4C24.2 17.6 13.5 9.6 7.4 13.2 2.2 16.3 4.8 27.6 14 31.2c5.2 2 11.4 1.4 16.6-.8Z"
+        fill="#2a47c8"
+      />
+      <path
+        d="M33.4 30.4C39.8 17.6 50.5 9.6 56.6 13.2c5.2 3.1 2.6 14.4-6.6 18-5.2 2-11.4 1.4-16.6-.8Z"
+        fill="#2a47c8"
+      />
+      <path
+        d="M30.4 34.2c-7.6-.6-16.8 3.4-18.4 10.4-1.4 6.2 4.6 9.4 10 6.2 4.8-2.8 7.4-9.2 8.4-16.6Z"
+        fill="#f0643a"
+      />
+      <path
+        d="M33.6 34.2c7.6-.6 16.8 3.4 18.4 10.4 1.4 6.2-4.6 9.4-10 6.2-4.8-2.8-7.4-9.2-8.4-16.6Z"
+        fill="#f0643a"
+      />
+      <circle cx="13.2" cy="19.4" r="2.3" fill="#fffaf2" />
+      <circle cx="50.8" cy="19.4" r="2.3" fill="#fffaf2" />
+      <path
+        d="M32 24v24"
+        stroke="var(--fg-ink, #18203d)"
+        strokeWidth="3.2"
+        strokeLinecap="round"
+      />
+      <path
+        d="M31 24.5c-1.6-5-4.2-8.6-7.4-10.4M33 24.5c1.6-5 4.2-8.6 7.4-10.4"
+        fill="none"
+        stroke="var(--fg-ink, #18203d)"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}

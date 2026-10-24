@@ -1,0 +1,37 @@
+{
+  "study": "anti-slop",
+  "wave": "v1",
+  "prompt_version": "anti-slop-editor-v1",
+  "pairs": [
+    {
+      "id": "p1",
+      "destination": "linkedin",
+      "original": "I'm thrilled to announce that after 3 incredible years, I'm embarking on a new journey! 🚀 It's not just a new role — it's a chance to elevate how 40,000 small businesses navigate the ever-evolving landscape of payments. Grateful for every lesson along the way. The best part? I get to do it alongside a team that truly embodies innovation, collaboration, and passion. Onward and upward! #NewBeginnings #Fintech #Grateful",
+      "rewrite": "After 3 years, I'm starting a new role. The work: payments for 40,000 small businesses. I'm grateful for what the last job taught me, and I'm glad to be doing this next part with this team."
+    },
+    {
+      "id": "p2",
+      "destination": "landing_page",
+      "original": "Unlock the power of seamless scheduling. In today's fast-paced world, your time is your most valuable asset. Our cutting-edge, AI-driven platform empowers teams to effortlessly coordinate meetings, eliminate back-and-forth, and focus on what truly matters. Join 2,500+ forward-thinking companies who have revolutionized the way they work. Start your free 14-day trial today!",
+      "rewrite": "Schedule meetings without the back-and-forth. Your team picks a time in one step, and you get back to the actual work. 2,500+ companies use it. Free 14-day trial."
+    },
+    {
+      "id": "p3",
+      "destination": "cold_email",
+      "original": "Hi Sarah,\n\nI hope this email finds you well! I came across your company and was truly impressed by your commitment to excellence. I wanted to reach out because I believe our robust analytics solution could be a game-changer for your team. We've helped companies like yours achieve a 32% increase in conversion rates by leveraging data-driven insights. Would you be open to a quick 15-minute call to explore potential synergies?\n\nBest regards,\nTom",
+      "rewrite": "Hi Sarah,\n\nWe build analytics for teams like yours. Companies we work with have seen a 32% increase in conversion rates. Would a 15-minute call be useful to see if that applies to you?\n\nTom"
+    },
+    {
+      "id": "p4",
+      "destination": "bio",
+      "original": "Passionate product designer with 8+ years of experience crafting intuitive, user-centric digital experiences. I thrive at the intersection of design, technology, and strategy, leveraging a holistic approach to solve complex problems. Dedicated to creating meaningful, impactful solutions that delight users and drive business results. Currently based in Brooklyn.",
+      "rewrite": "Product designer with 8+ years of experience. I design digital products that are easy to use and that move the business numbers. I work across design, engineering and strategy. Currently based in Brooklyn."
+    },
+    {
+      "id": "p5",
+      "destination": "x",
+      "original": "Ever wondered why most startups fail? 🤔 It's not about the idea — it's about execution. After building 4 companies, here's the thing: the secret isn't working harder, it's working smarter. Delve into my latest thread to discover the 5 pivotal lessons that transformed my journey. 🧵👇 #StartupLife #Entrepreneurship #Growth",
+      "rewrite": "I've built 4 companies. The ideas mattered less than how we executed them. 5 lessons I learned the hard way below 🧵👇"
+    }
+  ]
+}

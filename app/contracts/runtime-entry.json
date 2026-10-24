@@ -1,0 +1,208 @@
+{
+  "contract_revision": "wa-v2.1-runtime.1",
+  "evidence_level": "fixture",
+  "warning": "Additive interface proposal. Even all-true synthetic readiness is not public credential proof.",
+  "valid": [
+    {
+      "id": "unverified-boundary-closes-entry-and-quote",
+      "definition": "RuntimeReadiness",
+      "payload": {
+        "observed_at": "2026-10-24T17:15:00.000Z",
+        "expires_at": "2026-10-24T17:16:00.000Z",
+        "stale": false,
+        "available_slots": 2,
+        "host_lead_ready": true,
+        "membership_ready": true,
+        "credential_boundary_verified": false,
+        "entry_available": false,
+        "quoting_available": false,
+        "reason": "credential_boundary_unverified"
+      }
+    },
+    {
+      "id": "expired-runtime",
+      "definition": "RuntimeReadiness",
+      "payload": {
+        "observed_at": "2026-10-24T17:15:00.000Z",
+        "expires_at": "2026-10-24T17:15:01.000Z",
+        "stale": true,
+        "available_slots": null,
+        "host_lead_ready": false,
+        "membership_ready": false,
+        "credential_boundary_verified": false,
+        "entry_available": false,
+        "quoting_available": false,
+        "reason": "runtime_expired"
+      }
+    },
+    {
+      "id": "entry-allocation-bound-to-server-session",
+      "definition": "EntryAllocationBinding",
+      "payload": {
+        "entry_principal_id": "fixture_browser_session_01",
+        "request_id": "fixture_entry_0001",
+        "room_id": "fixture_room_01",
+        "allocated_at": "2026-10-24T17:15:00.000Z",
+        "expires_at": "2026-10-24T21:00:00.000Z"
+      }
+    }
+  ],
+  "invalid": [
+    {
+      "id": "readiness-missing-freshness",
+      "definition": "RuntimeReadiness",
+      "payload": {
+        "available_slots": 2,
+        "host_lead_ready": true,
+        "membership_ready": true,
+        "credential_boundary_verified": true,
+        "entry_available": true,
+        "quoting_available": true,
+        "reason": null
+      }
+    },
+    {
+      "id": "entry-key-without-principal",
+      "definition": "EntryAllocationBinding",
+      "payload": {
+        "request_id": "fixture_entry_0001",
+        "room_id": "fixture_room_01",
+        "allocated_at": "2026-10-24T17:15:00.000Z",
+        "expires_at": "2026-10-24T21:00:00.000Z"
+      }
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "cross-browser-key-nondisclosure",
+      "given": {
+        "bound_entry_principal_id": "fixture_browser_session_01",
+        "bound_request_id": "fixture_entry_0001",
+        "room_id": "fixture_room_01"
+      },
+      "input": {
+        "entry_principal_id": "fixture_browser_session_02",
+        "request_id": "fixture_entry_0001"
+      },
+      "expected": {
+        "code": "FORBIDDEN",
+        "existing_room_link_disclosed": false,
+        "new_allocation": false
+      }
+    },
+    {
+      "id": "same-browser-concurrent-entry",
+      "given": {
+        "entry_principal_id": "fixture_browser_session_01",
+        "request_id": "fixture_entry_0001",
+        "concurrent_requests": 2
+      },
+      "expected": {
+        "distinct_allocated_rooms": 1,
+        "same_outcome_for_both": true
+      }
+    },
+    {
+      "id": "entry-retry-after-response-loss",
+      "given": {
+        "entry_principal_id": "fixture_browser_session_01",
+        "request_id": "fixture_entry_0001",
+        "allocation_persisted": true,
+        "response_lost": true
+      },
+      "expected": {
+        "new_allocation": false,
+        "returned_room_id": "fixture_room_01"
+      }
+    },
+    {
+      "id": "unreconcilable-entry-response-loss",
+      "given": {
+        "allocation_outcome": "unknown",
+        "provider_lookup_supported": false
+      },
+      "expected": {
+        "code": "NEEDS_RECONCILIATION",
+        "new_allocation": false
+      }
+    },
+    {
+      "id": "pool-exhaustion",
+      "given": {
+        "unused_verified_private_rooms": 0
+      },
+      "expected": {
+        "code": "RUNTIME_UNAVAILABLE",
+        "returned_room_link": false,
+        "room_reused_across_buyers": false
+      }
+    },
+    {
+      "id": "prefetch-does-not-allocate",
+      "input": {
+        "method": "GET",
+        "purpose": "prefetch"
+      },
+      "expected": {
+        "new_allocation": false
+      }
+    },
+    {
+      "id": "expired-readiness-fails-closed",
+      "given": {
+        "readiness": {
+          "observed_at": "2026-10-24T17:15:00.000Z",
+          "expires_at": "2026-10-24T17:16:00.000Z",
+          "stale": false,
+          "available_slots": 2,
+          "host_lead_ready": true,
+          "membership_ready": true,
+          "credential_boundary_verified": true,
+          "entry_available": true,
+          "quoting_available": true,
+          "reason": null
+        },
+        "now": "2026-10-24T17:17:00.000Z"
+      },
+      "expected": {
+        "entry_available": false,
+        "quoting_available": false,
+        "new_claim_authorized": false
+      }
+    },
+    {
+      "id": "claimed-entry-ready-without-boundary-proof",
+      "given": {
+        "readiness": {
+          "observed_at": "2026-10-24T17:15:00.000Z",
+          "expires_at": "2026-10-24T17:16:00.000Z",
+          "stale": false,
+          "available_slots": 2,
+          "host_lead_ready": true,
+          "membership_ready": true,
+          "credential_boundary_verified": false,
+          "entry_available": true,
+          "quoting_available": true,
+          "reason": "credential_boundary_unverified"
+        }
+      },
+      "expected": {
+        "entry_available": false,
+        "quoting_available": false,
+        "reason": "credential_boundary_unverified"
+      }
+    },
+    {
+      "id": "missing-membership-lookup",
+      "given": {
+        "provider_membership_lookup": "unavailable",
+        "last_known_membership": true
+      },
+      "expected": {
+        "entry_available": false,
+        "quoting_available": false,
+        "new_claim_authorized": false
+      }
+    }
+  ]
+}

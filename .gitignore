@@ -1,0 +1,14 @@
+.env
+.env.*
+!.env.example
+node_modules/
+.next/
+.vercel/
+dist/
+coverage/
+*.sqlite*
+*.db*
+*.log
+.solari/
+.payments/
+.DS_Store

@@ -1,0 +1,13 @@
+{
+  "name": "wittle-rooms-entry",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=22.13.0" },
+  "scripts": {
+    "test": "node --test entry.test.mjs host-proposal.test.mjs concierge-attesters.test.mjs",
+    "smoke": "node smoke.mjs",
+    "smoke:checkout": "node checkout-smoke.mjs",
+    "smoke:host": "node host-smoke.mjs",
+    "smoke:concierge": "node concierge-smoke.mjs"
+  }
+}

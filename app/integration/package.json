@@ -1,0 +1,10 @@
+{
+  "name": "wittle-private-auditor-integration",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test *.test.mjs",
+    "smoke": "node smoke.mjs",
+    "serve:fixture": "node server.mjs --fixture"
+  }
+}

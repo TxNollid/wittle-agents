@@ -1,0 +1,16 @@
+{
+  "name": "wittle-terac-studies",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": "24.x"
+  },
+  "scripts": {
+    "test": "node --test *.test.mjs"
+  },
+  "dependencies": {
+    "@neondatabase/serverless": "1.2.0",
+    "@whop/sdk": "^2.6.0"
+  }
+}

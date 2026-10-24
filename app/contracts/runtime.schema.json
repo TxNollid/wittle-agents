@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:wittle:agents:wa-v2.1-runtime.1",
+  "title": "wa-v2.1 additive runtime/entry proposal; owner integration review required",
+  "$comment": "Does not change the frozen core schema. Shape does not establish current readiness, membership or a credential boundary.",
+  "$defs": {
+    "Id": {"type":"string","pattern":"^[A-Za-z0-9_-]{1,200}$"},
+    "Time": {"type":"string","format":"date-time","pattern":"Z$"},
+    "RuntimeReadiness": {
+      "type":"object","additionalProperties":false,
+      "required":["observed_at","expires_at","stale","available_slots","host_lead_ready","membership_ready","credential_boundary_verified","entry_available","quoting_available","reason"],
+      "properties":{
+        "observed_at":{"$ref":"#/$defs/Time"},"expires_at":{"$ref":"#/$defs/Time"},"stale":{"type":"boolean"},"available_slots":{"type":["integer","null"],"minimum":0},
+        "host_lead_ready":{"type":"boolean"},"membership_ready":{"type":"boolean"},"credential_boundary_verified":{"type":"boolean"},"entry_available":{"type":"boolean"},"quoting_available":{"type":"boolean"},
+        "reason":{"enum":[null,"runtime_expired","stale","capacity_full","membership_unverified","credential_boundary_unverified","host_unavailable","entry_unavailable","terms_unavailable","unknown"]}
+      }
+    },
+    "EntryAllocationBinding": {
+      "type":"object","additionalProperties":false,
+      "required":["entry_principal_id","request_id","room_id","allocated_at","expires_at"],
+      "properties":{"entry_principal_id":{"$ref":"#/$defs/Id"},"request_id":{"type":"string","pattern":"^[A-Za-z0-9_-]{8,100}$"},"room_id":{"$ref":"#/$defs/Id"},"allocated_at":{"$ref":"#/$defs/Time"},"expires_at":{"$ref":"#/$defs/Time"}}
+    }
+  }
+}

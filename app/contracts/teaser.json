@@ -1,0 +1,130 @@
+{
+  "contract_revision": "wa-v2.1-teaser.1",
+  "evidence_level": "fixture",
+  "warning": "Synthetic source and audit data. No actual lead eligibility, public-browser observation, post or paid-order evidence.",
+  "valid": [
+    {
+      "id": "unpaid-teaser-input",
+      "definition": "TeaserInput",
+      "payload": {
+        "site_url": "https://fixture.example/",
+        "request_id": "fixture_teaser_0001",
+        "mode": "fixture",
+        "prompt_version": "auditor-v1",
+        "provenance": {
+          "source_url": "https://source.fixture.example/feedback-request",
+          "observed_at": "2026-10-24T17:00:00.000Z",
+          "evidence_level": "fixture"
+        }
+      }
+    },
+    {
+      "id": "bounded-teaser-limits",
+      "definition": "TeaserLimits",
+      "payload": {
+        "maxObservations": 2,
+        "maxRuntimeMs": 120000,
+        "pageTimeoutMs": 20000
+      }
+    },
+    {
+      "id": "separate-growth-source-eligibility",
+      "definition": "TeaserLeadEvidence",
+      "payload": {
+        "lead_id": "fixture_lead_01",
+        "site_url": "https://fixture.example/",
+        "source_url": "https://source.fixture.example/feedback-request",
+        "requested_feedback": true,
+        "observed_at": "2026-10-24T17:00:00.000Z",
+        "evidence_ref": "fixture_source_observation_01"
+      }
+    }
+  ],
+  "invalid": [
+    {
+      "id": "no-invented-paid-identity",
+      "definition": "TeaserInput",
+      "payload": {
+        "site_url": "https://fixture.example/",
+        "request_id": "fixture_teaser_0001",
+        "mode": "fixture",
+        "prompt_version": "auditor-v1",
+        "provenance": {
+          "source_url": "https://source.fixture.example/feedback-request",
+          "observed_at": "2026-10-24T17:00:00.000Z",
+          "evidence_level": "fixture"
+        },
+        "order_id": "invented_paid_order",
+        "quote_id": "invented_quote"
+      }
+    },
+    {
+      "id": "fixture-provenance-cannot-be-live",
+      "definition": "TeaserInput",
+      "payload": {
+        "site_url": "https://fixture.example/",
+        "request_id": "fixture_teaser_0001",
+        "mode": "live",
+        "prompt_version": "auditor-v1",
+        "provenance": {
+          "source_url": "https://source.fixture.example/feedback-request",
+          "observed_at": "2026-10-24T17:00:00.000Z",
+          "evidence_level": "fixture"
+        }
+      }
+    },
+    {
+      "id": "teaser-cannot-expand-observations",
+      "definition": "TeaserLimits",
+      "payload": {
+        "maxObservations": 3
+      }
+    },
+    {
+      "id": "no-source-provenance",
+      "definition": "TeaserInput",
+      "payload": {
+        "site_url": "https://fixture.example/",
+        "request_id": "fixture_teaser_0001",
+        "mode": "fixture",
+        "prompt_version": "auditor-v1"
+      }
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "real-source-required-before-eligible-draft",
+      "given": {
+        "requested_feedback_asserted_by_model": true,
+        "source_observation_available": false
+      },
+      "expected": {
+        "eligible": false,
+        "external_message_sent": false
+      }
+    },
+    {
+      "id": "no-private-paid-report-reuse",
+      "given": {
+        "prior_paid_report_exists": true
+      },
+      "expected": {
+        "fresh_homepage_observation": true,
+        "paid_report_read": false,
+        "max_findings": 3
+      }
+    },
+    {
+      "id": "draft-output-is-not-post",
+      "given": {
+        "teaser_result_ready": true,
+        "posting_authorization": false
+      },
+      "expected": {
+        "draft_saved": true,
+        "post_published": false,
+        "external_message_sent": false
+      }
+    }
+  ]
+}
